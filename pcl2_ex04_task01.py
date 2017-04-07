@@ -19,7 +19,11 @@ def main():
     """
     Call functions to test script.
     """
-    pass
+
+    indir = '/home/alex/Text+Berg_Release_152_v01'
+    outfile = 'frequent_lemmatized_sentences.txt'
+    getfreqwords(indir, outfile)
+
 
 
 if __name__ == '__main__':
