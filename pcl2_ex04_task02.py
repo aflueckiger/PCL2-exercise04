@@ -7,7 +7,8 @@
 # Student-ID.: 09-110-552 & 12-452-223
 
 """
-Module Description XXXX
+This module provides functions to download a Wikipedia dump and sample k titles
+out of all article with the Reservoir Sampling algorithm.
 """
 
 import urllib.request
@@ -18,12 +19,29 @@ import sys
 
 
 def progress_reporting(count, blocksize, totalsize):
+    """
+    This function reports the progress of downloaded blocks in console
+
+    Args:
+        count (int)
+        blocksize (int)
+        totalsize (int)
+    """
+
     percent = int(count * blocksize / totalsize * 100)
     sys.stdout.write(f'\rDowloaded {percent:0d}% of requested file.')
     sys.stdout.flush()
 
 
 def corpus_download(src_url, trg_xml):
+    """
+    This function downloads a source file from the internet and saves it locally.
+
+    Args:
+        src_url (str): URL of remote location
+        trg_xml (str): local destination to save file
+    """
+
     with open(trg_xml, 'w', encoding='utf-8') as f_xml:
         urllib.request.urlretrieve(
             src_url, filename=trg_xml, reporthook=progress_reporting)
@@ -32,11 +50,24 @@ def corpus_download(src_url, trg_xml):
 
 def gettitles(infile, testfile, trainfile, k):
     """
-    Returns @param k random nodes from @param iterable.
+    This functions iterates over Wikipedia-Dump and saves k random items
+    into a testfile and all other elements into a trainfile.
+
+    As sampling method the algorithm R is used (reservoir sampling).
+
+    Args:
+        infile (str or filehandler): file from which will be sampled
+        testfile (str): file in which k random elements will be written
+        trainfile (str): file in which all other elements will be written
+        k (int): number of sample
     """
+
+    # reservoir shows currently sampled items
     reservoir = []
+    # t counts seen elements regardless whether they are sampled or not
     t = 0
-    with open(testfile, 'w', encoding='utf-8') as f_test, open(trainfile, 'w', encoding='utf-8') as f_train:
+    with open(testfile, 'w', encoding='utf-8') as f_test, \
+            open(trainfile, 'w', encoding='utf-8') as f_train:
         elements = ET.iterparse(infile)
         for _, element in elements:
             if element.tag == '{http://www.mediawiki.org/xml/export-0.10/}title':
@@ -46,30 +77,17 @@ def gettitles(infile, testfile, trainfile, k):
                     m = random.randint(0, t)
                     if m < k:
                         f_train.write(reservoir[m] + '\n')
-                        reservoir[m] = element.text 
+                        reservoir[m] = element.text
                     else:
                         f_train.write(element.text + '\n')
                 t += 1
+
+            # Some cleaning up to prevent memory issues
             element.clear()
             while element.getprevious() is not None:
                 del element.getparent()[0]
-        """
-        elements = ET.iterparse(infile, tag == '{http://www.mediawiki.org/xml/export-0.10/}title')
-        for t, node in enumerate(elements):
-            elem_title = node[1]
-            if t < k:
-                reservoir.append(elem_title.text)
-            else:
-                m = random.randint(0, t)
-                if m < k:
-                    f_train.write(reservoir[m] + '\n')
-                    reservoir[m] = elem_title.text 
-                else:
-                    f_train.write(elem_title.text + '\n')
-            elem_title.clear()
-            while elem_title.getprevious() is not None:
-                del elem_title.getparent()[0]
-        """
+
+        # write sampled items into file
         for article in reservoir:
             f_test.write(article + '\n')
 
@@ -78,14 +96,16 @@ def main():
     """
     Call functions to test script.
     """
+
     src_url = 'https://dumps.wikimedia.org/dewiki/latest/dewiki-latest-pages-articles.xml.bz2'
     trg_xml = '/home/alex/dewiki-latest-pages-articles.xml.bz2'
     testfile = '/home/alex/wikipedia_articles_testfile.txt'
     trainfile = '/home/alex/wikipedia_articles_trainfile.txt'
+
     # corpus_download(src_url, trg_xml)
 
     with bz2.open(trg_xml, mode='r') as f_corpus:
-        gettitles(f_corpus, testfile, trainfile, 100)
+        gettitles(f_corpus, testfile, trainfile, 26)
 
 
 if __name__ == '__main__':
