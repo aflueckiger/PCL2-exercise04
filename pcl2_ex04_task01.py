@@ -92,7 +92,7 @@ def main():
     Call functions to test this module.
     """
 
-    indir = '/home/alex/Text+Berg_Release_152_v01/Corpus_XML/SAC/'
+    indir = 'Text+Berg_Release_152_v01/Corpus_XML/SAC/'
     outfile = 'frequent_lemmatized_sentences.txt'
     getfreqwords(indir, outfile)
 

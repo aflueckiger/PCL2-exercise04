@@ -70,7 +70,7 @@ def gettitles(infile, testfile, trainfile, k):
             open(trainfile, 'w', encoding='utf-8') as f_train:
         elements = ET.iterparse(infile)
         for _, element in elements:
-            if element.tag == '{http://file:///home/alex/Google Drive/2017_04_Python_Fragen_Alexwww.mediawiki.org/xml/export-0.10/}title':
+            if element.tag == '{http://www.mediawiki.org/xml/export-0.10/}title':
                 if t < k:
                     reservoir.append(element.text)
                 else:
@@ -98,9 +98,9 @@ def main():
     """
 
     src_url = 'https://dumps.wikimedia.org/dewiki/latest/dewiki-latest-pages-articles.xml.bz2'
-    trg_xml = '/home/alex/dewiki-latest-pages-articles.xml.bz2'
-    testfile = '/home/alex/wikipedia_articles_testfile.txt'
-    trainfile = '/home/alex/wikipedia_articles_trainfile.txt'
+    trg_xml = 'dewiki-latest-pages-articles.xml.bz2'
+    testfile = 'wikipedia_articles_testfile.txt'
+    trainfile = 'wikipedia_articles_trainfile.txt'
 
     # corpus_download(src_url, trg_xml)
 
