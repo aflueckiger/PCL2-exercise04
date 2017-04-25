@@ -31,7 +31,7 @@ def getfreqwords(indir, outfile):
         None
     """
     count_sents = dict()
-    # Asteriks is used as wildcard.
+    # Asterisk is used as wildcard.
     file_pattern = indir + 'SAC-Jahrbuch_*_mul.xml'
     files = glob.glob(file_pattern)
     for file in files:

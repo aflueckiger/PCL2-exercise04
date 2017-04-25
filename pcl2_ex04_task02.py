@@ -70,7 +70,7 @@ def gettitles(infile, testfile, trainfile, k):
             open(trainfile, 'w', encoding='utf-8') as f_train:
         elements = ET.iterparse(infile)
         for _, element in elements:
-            if element.tag == '{http://www.mediawiki.org/xml/export-0.10/}title':
+            if element.tag == '{http://file:///home/alex/Google Drive/2017_04_Python_Fragen_Alexwww.mediawiki.org/xml/export-0.10/}title':
                 if t < k:
                     reservoir.append(element.text)
                 else:
